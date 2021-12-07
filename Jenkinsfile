@@ -25,7 +25,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'reports/*.xml'
+                    junit 'target/surefire-reports/*.xml'
                 }
             }
         }
@@ -44,19 +44,6 @@ pipeline {
             }
         }
 
-        stage('Run local container') {
-            steps {
-                sh 'docker rm -f petclinic-temp || true'
-                sh "docker run -d --name petclinic-temp ${env.IMAGE}:${TAG}"
-            }
-        }
-        stage('Stop local container') {
-            steps {
-                sh 'docker kill petclinic-temp || true'
-                sh 'docker rm -f petclinic-temp || true'
-            }
-        }
-
         stage('Push to Dockerhub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
@@ -66,6 +53,21 @@ pipeline {
                     echo '||| Uploaded docker image to docker registry...'
                     }
                 }
+            }
+        }
+
+
+        stage('Run local container') {
+            steps {
+                echo '||| Run docker container...'
+                sh 'docker rm -f petclinic-temp || true'
+                sh "docker run -d --name petclinic-temp ${env.IMAGE}:${TAG}"
+            }
+        }
+        stage('Stop local container') {
+            steps {
+                sh 'docker kill petclinic-temp || true'
+                sh 'docker rm -f petclinic-temp || true'
             }
         }
     }
