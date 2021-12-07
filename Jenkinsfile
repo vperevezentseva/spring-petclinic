@@ -59,15 +59,15 @@ pipeline {
         }
 
         stage('Push to Dockerhub') {
-          steps {
-            withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]){
-                echo '||| Uploaded docker image to docker registry...'
-                script {
-                    sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
-                    sh "docker push ${env.IMAGE}:${TAG}"
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
+                    echo '||| Uploaded docker image to docker registry...'
+                    script {
+                        sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
+                        sh "docker push ${env.IMAGE}:${TAG}"
+                    }
                 }
             }
-          }
         }
-
+    }
 }
