@@ -12,13 +12,13 @@ pipeline {
 
     stages {
 
-        stage("Build") {
+        stage("Build Maven") {
             steps {
                 sh 'mvn -B -DskipTests clean package' 
                 echo '||| Builded...'
             }
         }
-        stage("Tests") {
+        stage("Tests Maven") {
             steps {
                 sh 'mvn test'
                 echo '||| Tested...'
@@ -29,7 +29,7 @@ pipeline {
                 }
             }
         }
-        stage("Build docker image") {
+        stage("Create docker image") {
             steps {
                 script {
                   if ( env.BRANCH_NAME == 'master' ) {
@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-        stage('Run local') {
+        stage('Run local container') {
             steps {
                 sh 'docker rm -f petclinic-temp || true'
                 sh "docker run -d --name petclinic-temp ${env.IMAGE}:${TAG}"
@@ -52,6 +52,7 @@ pipeline {
         }
         stage('Stop local container') {
             steps {
+                sh 'docker kill petclinic-temp || true'
                 sh 'docker rm -f petclinic-temp || true'
             }
         }
@@ -59,10 +60,10 @@ pipeline {
         stage('Push to Dockerhub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
-                    echo '||| Uploaded docker image to docker registry...'
                     script {
                         sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
                         sh "docker push ${env.IMAGE}:${TAG}"
+                    echo '||| Uploaded docker image to docker registry...'
                     }
                 }
             }
