@@ -1,9 +1,9 @@
 pipeline {
 
-    agent {
-        docker {
-            image 'maven:3.6.3'
-        }
+    agent any
+
+    tools {
+        maven 'Maven 3.6.3'
     }
 
     environment {
