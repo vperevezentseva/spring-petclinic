@@ -8,12 +8,6 @@ pipeline {
 
     stages {
 
-        stage ("Clone repo") {
-            steps {
-                git "https://github.com/${env.IMAGE}.git"
-            }
-        }
-
         stage("Build") {
             steps {
                 sh 'mvn -B -DskipTests clean package' 
