@@ -17,7 +17,7 @@ pipeline {
 
         stage('Cloning Git') {
             steps {
-                git "https://github.com/${PROJECT}.git"
+                git "https://github.com/vperevezentseva/spring-petclinic.git"
             }
         }
         stage('Compile') {
