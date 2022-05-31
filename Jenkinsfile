@@ -56,32 +56,7 @@ pipeline {
                 }
             }
         }
-/*        stage("Create docker image") {
-            steps {
-                script {
-                  if ( env.BRANCH_NAME == 'main' ) {
-                    pom = readMavenPom file: 'pom.xml'
-                    TAG = pom.version
-                  } else {
-                    TAG = env.BRANCH_NAME
-                  }
-                  sh "docker build -t ${env.PROJECT}:${TAG} ."
-                }
-                echo '||| Created docker image...'
-            }
-        }*/
 
-/*        stage('Push to Dockerhub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
-                    script {
-                        sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
-                        sh "docker push ${env.PROJECT}:${TAG}"
-                    echo '||| Uploaded docker image to docker registry...'
-                    }
-                }
-            }
-        }*/
 
         stage('Deploy Image') {
             steps{
