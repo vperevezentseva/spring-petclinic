@@ -1,7 +1,7 @@
 pipeline {
 
     parameters{    
-      stringParam(defaultValue: 'latest', description: 'release tag', name: 'TAG')
+      string(defaultValue: 'latest', description: 'release tag', name: 'TAG')
     }
 
     agent any
