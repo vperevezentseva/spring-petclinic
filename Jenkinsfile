@@ -72,6 +72,7 @@ pipeline {
                     docker.withRegistry( '', dockerCredential ) {
                         dockerImage.push()
                     }
+                    echo '||| Uploaded docker image to docker registry...'
                 }
             }
         }
