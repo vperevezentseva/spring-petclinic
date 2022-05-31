@@ -50,12 +50,18 @@ pipeline {
         }
 
 
-        stage('Building Image') {
-            steps{
+        stage("Create docker image") {
+            steps {
                 script {
-                    dockerImage = docker.build PROJECT + '-' + BRANCH_NAME + ":latest"
-                    echo '||| Builded docker image...'
+                  if ( env.BRANCH_NAME == 'master' ) {
+                    pom = readMavenPom file: 'pom.xml'
+                    TAG = pom.version
+                  } else {
+                    TAG = env.BRANCH_NAME
+                  }
+                  sh "docker build -t ${env.PROJECT}:${TAG} ."
                 }
+                echo '||| Created docker image...'
             }
         }
         stage('Deploy Image') {
@@ -68,15 +74,26 @@ pipeline {
                 }
             }
         }
-
+        stage('Push to Dockerhub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
+                    script {
+                        sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
+                        sh "docker push ${env.PROJECT}:${TAG}"
+                    echo '||| Uploaded docker image to docker registry...'
+                    }
+                }
+            }
+        }
 
         stage('Run local container') {
             steps {
                 echo '||| Run docker container...'
                 sh "docker rm -f petclinic-temp || true"
-                sh "docker run -d --name petclinic-temp ${env.PROJECT}-${env.BRANCH_NAME}:latest"
+                sh "docker run -d --name petclinic-temp ${env.PROJECT}:${TAG}"
             }
         }
+
         stage('Stop local container') {
             steps {
                 sh "docker kill petclinic-temp || true"
