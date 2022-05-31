@@ -51,7 +51,7 @@ pipeline {
         stage("Create docker image") {
             steps {
                 script {
-                  sh "docker build -t ${env.PROJECT}:${TAG} ."
+                  sh "docker build -t ${env.PROJECT}:latest ."
                 }
                 echo '||| Created docker image...'
             }
