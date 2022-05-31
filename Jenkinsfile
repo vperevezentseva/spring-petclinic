@@ -1,10 +1,8 @@
 pipeline {
 
-    options([
-      parameters([
-        string(name: 'TAG', defaultValue: '')
-      ])
-    ])
+    parameters{    
+      string(defaultValue: 'latest', description: 'release tag', name: 'TAG')
+    }
 
     agent any
     tools {
@@ -13,8 +11,6 @@ pipeline {
 
     environment {
         PROJECT = "vperevezentseva/spring-petclinic"
-        dockerCredential = 'dockerhub_vperevezentseva'
-        dockerImage = ''
     }
 
 
