@@ -56,9 +56,10 @@ pipeline {
                   if ( env.BRANCH_NAME == 'master' ) {
                     pom = readMavenPom file: 'pom.xml'
                     TAG = pom.version
-                  } else {
+                  } /*else {
                     TAG = env.BRANCH_NAME
-                  }
+                    echo "TAG = ${env.BRANCH_NAME}"
+                  }*/
                   sh "docker build -t ${env.PROJECT}:${TAG} ."
                 }
                 echo '||| Created docker image...'
