@@ -1,10 +1,8 @@
 pipeline {
 
-    options([
-      parameters([
-        string(name: 'TAG', defaultValue: '')
-      ])
-    ])
+    parameters{    
+      booleanParam(defaultValue: false, description: 'release tag', name: 'TAG')
+    }
 
     agent any
     tools {
