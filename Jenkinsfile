@@ -64,9 +64,10 @@ pipeline {
                 echo '||| Created docker image...'
             }
         }
+
         stage('Push to Dockerhub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_vperevezentseva', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                     script {
                         sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
                         sh "docker push ${env.PROJECT}:${TAG}"
