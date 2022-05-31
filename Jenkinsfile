@@ -49,24 +49,38 @@ pipeline {
                 }
             }
         }
-        stage('Building Image') {
-            steps{
+
+
+        stage("Create docker image") {
+            steps {
                 script {
-                    dockerImage = docker.build ${env.PROJECT} + ":latest"
+                  sh "docker build -t ${env.PROJECT}:${TAG} ."
                 }
+                echo '||| Created docker image...'
             }
         }
-
-
-        stage('Deploy Image') {
-            steps{
-                script {
-                    docker.withRegistry( '', dockerCredential ) {
-                        dockerImage.push()
+        stage('Push to Dockerhub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
+                    script {
+                        sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
+                        sh "docker push ${env.PROJECT}:${TAG}"
+                    echo '||| Uploaded docker image to docker registry...'
                     }
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
+
         stage('Run local container') {
             steps {
                 echo '||| Run docker container...'
