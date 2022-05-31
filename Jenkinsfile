@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         PROJECT = "vperevezentseva/spring-petclinic"
-        dockerCredential = 'dockerhubcreds'
+        dockerCredential = 'dockerhub_vperevezentseva'
         dockerImage = ''
     }
 
@@ -16,7 +16,7 @@ pipeline {
 
         stage('Cloning Git') {
             steps {
-                git "https://github.com/vperevezentseva/spring-petclinic.git"
+                git "https://github.com/${PROJECT}.git"
             }
         }
         stage('Compile') {
