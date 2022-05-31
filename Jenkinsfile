@@ -1,5 +1,11 @@
 pipeline {
 
+    properties([
+      parameters([
+        string(name: 'TAG', defaultValue: '')
+      ])
+    ])
+
     agent any
     tools {
         maven 'Maven 3.6.3'
