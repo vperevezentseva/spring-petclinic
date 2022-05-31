@@ -60,7 +60,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                     script {
-                        sh "docker login -u ${env.dockerUsername} -p ${env.dockerPassword}"
+                        sh "docker login -u ${env.dockerUsername} --password-stdin ${env.dockerPassword}"
                         sh "docker push ${env.PROJECT}:${TAG}"
                     echo '||| Uploaded docker image to docker registry...'
                     }
