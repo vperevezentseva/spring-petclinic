@@ -50,19 +50,11 @@ pipeline {
         }
 
 
-        stage("Create docker image") {
-            steps {
-                script {
-                  sh "docker build -t ${env.PROJECT}:latest ."
-                }
-                echo '||| Created docker image...'
-            }
-        }
         stage('Building Image') {
             steps{
                 script {
                     dockerImage = docker.build ${env.PROJECT} + ":latest"
-                    echo '||| Created docker image...'
+                    echo '||| Builded docker image...'
                 }
             }
         }
@@ -76,7 +68,6 @@ pipeline {
                 }
             }
         }
-
 
 
         stage('Run local container') {
