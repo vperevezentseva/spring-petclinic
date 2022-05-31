@@ -74,7 +74,7 @@ pipeline {
                 }
             }
         }
-        stage('Push to Dockerhub') {
+/*        stage('Push to Dockerhub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
                     script {
@@ -84,7 +84,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Run local container') {
             steps {
