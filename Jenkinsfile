@@ -17,7 +17,7 @@ pipeline {
 
         stage('Cloning Git') {
             steps {
-                git "https://github.com/${env.PROJECT}.git"
+                git "https://github.com/${PROJECT}.git"
             }
         }
         stage('Compile') {
