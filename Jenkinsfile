@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         PROJECT = "vperevezentseva/spring-petclinic"
-        dockerCredential = 'dockerhubcreds'
+        dockerCredential = 'dockerhub_vperevezentseva'
         dockerImage = ''
     }
 
