@@ -6,7 +6,9 @@ pipeline {
     }
 
     environment {
-        PROJECT = "vperevezentseva/spring-petclinic"
+        PROJECT = "spring-petclinic"
+        dockerCredential = 'dockerhubcreds'
+        dockerImage = ''
     }
 
 
@@ -56,17 +58,24 @@ pipeline {
                 echo '||| Created docker image...'
             }
         }
-        stage('Push to Dockerhub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhubcreds', passwordVariable: 'dockerPassword', usernameVariable: 'dockerUsername')]) {
-                    script {
-                        sh "docker login -u ${env.dockerUsername} --password-stdin ${env.dockerPassword}"
-                        sh "docker push ${env.PROJECT}:${TAG}"
-                    echo '||| Uploaded docker image to docker registry...'
+        stage('Building Image') {
+            steps{
+                script {
+                    dockerImage = docker.build ${env.PROJECT} + ":latest"
+                    echo '||| Created docker image...'
+                }
+            }
+        }
+        stage('Deploy Image') {
+            steps{
+                script {
+                    docker.withRegistry( '', dockerCredential ) {
+                        dockerImage.push()
                     }
                 }
             }
         }
+
 
 
         stage('Run local container') {
