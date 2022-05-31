@@ -53,7 +53,7 @@ pipeline {
         stage('Building Image') {
             steps{
                 script {
-                    dockerImage = docker.build PROJECT + '-' + BRANCH_NAME + ":latest"
+                    dockerImage = docker.build PROJECT + ":latest"
                     echo '||| Builded docker image...'
                 }
             }
@@ -74,7 +74,7 @@ pipeline {
             steps {
                 echo '||| Run docker container...'
                 sh "docker rm -f petclinic-temp || true"
-                sh "docker run -d --name petclinic-temp ${env.PROJECT}-${env.BRANCH_NAME}:latest"
+                sh "docker run -d --name petclinic-temp ${env.PROJECT}:latest"
             }
         }
         stage('Stop local container') {
